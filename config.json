@@ -113,7 +113,7 @@
             "parameters": {
                 "InferenceEndpoint": "http://inference:8000/inference/{Token}/{Timeframe}",
                 "Token": "MEME",
-                "Timeframe": "1h"
+                "Timeframe": "60m"
             }
         },
         {

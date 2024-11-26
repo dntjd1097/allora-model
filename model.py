@@ -81,8 +81,8 @@ def resample_data(price_series, timeframe):
         return price_series.resample('10T').interpolate(method='linear')
     elif timeframe == '20m':
         return price_series.resample('20T').interpolate(method='linear')
-    elif timeframe == '1h':
-        return price_series.resample('1H').interpolate(method='linear')
+    elif timeframe == '60m':
+        return price_series.resample('60T').interpolate(method='linear')
     elif timeframe == '1d':
         return price_series  # Daily data is already in the correct format
     else:
@@ -102,8 +102,8 @@ def train_model(token, timeframe):
         price_series = price_series.resample('20T').interpolate(method='linear')
     elif timeframe == '5m':
         price_series = price_series.resample('5T').interpolate(method='linear')
-    elif timeframe == '1h':
-        price_series = price_series.resample('1H').interpolate(method='linear')
+    elif timeframe == '60m':
+        price_series = price_series.resample('60T').interpolate(method='linear')
 
     # Step 1: Fit ARIMA model
     arima_model = ARIMA(price_series, order=(1,1,1))  # You may need to adjust the order

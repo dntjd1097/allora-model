@@ -217,6 +217,8 @@ def combine_price_data(token, timeframe):
     # Adjust for timeframe
     if timeframe == '10m':
         csv_price_series = csv_price_series.resample('10T').interpolate(method='linear')
+    elif timeframe == '5m':
+        csv_price_series = csv_price_series.resample('5T').interpolate(method='linear')
     elif timeframe == '20m':
         csv_price_series = csv_price_series.resample('20T').interpolate(method='linear')
     elif timeframe == '60m':

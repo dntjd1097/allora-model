@@ -11,4 +11,4 @@ training_price_data_path = os.path.join(data_base_path, 'price_data')
 
 # Supported tokens and timeframes
 supported_tokens = ["BTC", "ETH", "SOL", "BNB", "ARB","MEME"]
-supported_timeframes = ["5m","10m", "20m", "1d","1h"]
+supported_timeframes = ["5m","10m", "20m", "1d","60m"]
