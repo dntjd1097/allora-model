@@ -23,7 +23,8 @@ def get_current_price(token, retries=3, backoff_factor=1):
         'SOL': 'solana',
         'BTC': 'bitcoin',
         'BNB': 'binancecoin',
-        'ARB': 'arbitrum'
+        'ARB': 'arbitrum',
+        'MEME': 'memecoin-2'
     }
 
     url = f"https://api.coingecko.com/api/v3/simple/price?ids={token_map[token]}&vs_currencies=usd"

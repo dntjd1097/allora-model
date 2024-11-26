@@ -22,7 +22,8 @@ def get_coingecko_url(token):
         'SOL': 'solana',
         'BTC': 'bitcoin',
         'BNB': 'binancecoin',
-        'ARB': 'arbitrum'
+        'ARB': 'arbitrum',
+        'MEME': 'memecoin-2'
     }
     
     token = token.upper()
@@ -74,10 +75,14 @@ def download_data():
                     logging.error(f"Failed to download data for {token} after {retries} attempts.")
 
 def resample_data(price_series, timeframe):
-    if timeframe == '10m':
+    if timeframe == '5m':
+        return price_series.resample('5T').interpolate(method='linear')
+    elif timeframe == '10m':
         return price_series.resample('10T').interpolate(method='linear')
     elif timeframe == '20m':
         return price_series.resample('20T').interpolate(method='linear')
+    elif timeframe == '1h':
+        return price_series.resample('1H').interpolate(method='linear')
     elif timeframe == '1d':
         return price_series  # Daily data is already in the correct format
     else:
@@ -95,6 +100,10 @@ def train_model(token, timeframe):
         price_series = price_series.resample('10T').interpolate(method='linear')
     elif timeframe == '20m':
         price_series = price_series.resample('20T').interpolate(method='linear')
+    elif timeframe == '5m':
+        price_series = price_series.resample('5T').interpolate(method='linear')
+    elif timeframe == '1h':
+        price_series = price_series.resample('1H').interpolate(method='linear')
 
     # Step 1: Fit ARIMA model
     arima_model = ARIMA(price_series, order=(1,1,1))  # You may need to adjust the order

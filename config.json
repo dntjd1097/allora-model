@@ -1,14 +1,19 @@
 {
     "wallet": {
-        "addressKeyName": "",
-        "addressRestoreMnemonic": "",
-        "alloraHomeDir": "/home/idekubagus/.allorad",
-        "gas": "1000000",
-        "gasAdjustment": 1.5,
-        "nodeRpc": "",
-        "maxRetries": 2,
-        "delay": 1,
-        "submitTx": true
+        "addressKeyName": "WalletName",
+        "addressRestoreMnemonic": "xxx_your_mnemonic_here_xxx",
+        "alloraHomeDir": "",
+        "gas": "auto",
+        "gasAdjustment": 2.0,
+        "gasPrices": 10,
+        "maxFees": 25000000,
+        "nodeRpc": "https://rpc-allora.mkv.one/",
+        "maxRetries": 5,
+        "retryDelay": 3,
+        "accountSequenceRetryDelay": 5,
+        "submitTx": true,
+        "blockDurationEstimated": 10,
+        "windowCorrectionFactor": 0.8
     },
     "worker": [
         {
@@ -100,7 +105,36 @@
                 "Token": "ARB",
                 "Timeframe": "20m"
             }
+        },
+        {
+            "topicId": 10,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 15,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}/{Timeframe}",
+                "Token": "MEME",
+                "Timeframe": "1h"
+            }
+        },
+        {
+            "topicId": 13,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 16,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}/{Timeframe}",
+                "Token": "ETH",
+                "Timeframe": "5m"
+            }
+        },
+        {
+            "topicId": 14,
+            "inferenceEntrypointName": "api-worker-reputer",
+            "loopSeconds": 17,
+            "parameters": {
+                "InferenceEndpoint": "http://inference:8000/inference/{Token}/{Timeframe}",
+                "Token": "BTC",
+                "Timeframe": "5m"
+            }
         }
-        
     ]
 }
