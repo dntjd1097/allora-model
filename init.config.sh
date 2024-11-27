@@ -32,6 +32,12 @@ mkdir -p ./worker-data
 # 인자 체크 및 설정
 if [[ "$1" == "--i" ]]; then
     shift
+    # --i 옵션이어도 인자가 있다면 업데이트
+    if [ $# -eq 3 ]; then
+        sed -i "s/\"addressKeyName\": \".*\"/\"addressKeyName\": \"$1\"/" config.json
+        sed -i "s/\"addressRestoreMnemonic\": \".*\"/\"addressRestoreMnemonic\": \"$2\"/" config.json
+        sed -i "s/CGC_API_KEY=.*/CGC_API_KEY=$3/" docker-compose.yaml
+    fi
 else
     if [ $# -ne 3 ]; then
         show_help
