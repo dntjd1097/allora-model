@@ -12,6 +12,10 @@ def get_current_price(token, retries=3, backoff_factor=1):
     token = token.upper()
     current_time = datetime.now()
 
+    api_key = os.environ.get("CGC_API_KEY")
+    if not api_key:
+        raise Exception("CGC_API_KEY environment variable is not set")
+
     # Check if we have a cached price and if it's still valid
     if token in price_cache:
         cached_price, cache_time = price_cache[token]
@@ -30,7 +34,7 @@ def get_current_price(token, retries=3, backoff_factor=1):
     url = f"https://api.coingecko.com/api/v3/simple/price?ids={token_map[token]}&vs_currencies=usd"
     headers = {
         "accept": "application/json",
-        "x-cg-demo-api-key": os.environ.get("allora_cgi_api")
+        "x-cg-demo-api-key": api_key
     }
 
     for attempt in range(retries):

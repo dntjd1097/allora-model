@@ -1,50 +1,68 @@
 services:
-  inference:
-    container_name: inference-basic-eth-pred
-    build: .
-    command: python -u /app/app.py
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./inference-data:/app/data
-      - ./logs:/app/logs
+    inference:
+        container_name: inference-basic-eth-pred
+        build: .
+        command: python -u /app/app.py
+        environment:
+            - ALLORA_CGI_API=your_cgc_api_key
+        ports:
+            - '8000:8000'
+        volumes:
+            - ./inference-data:/app/data
+            - ./logs:/app/logs
+        restart: unless-stopped
+    updater:
+        container_name: updater-basic-eth-pred
+        build: .
+        environment:
+            - INFERENCE_API_ADDRESS=http://inference:8000
+        command: >
+            sh -c "
+            while true; do
+              python -u /app/update_app.py;
+              sleep 1d;
+            done
+            "
+        depends_on:
+            - inference
+        restart: unless-stopped
+    allora-worker:
+        container_name: allora-worker
+        image: alloranetwork/allora-offchain-node:latest
+        ports:
+            - '2112:2112'
+        volumes:
+            - ./worker-data:/data
+        depends_on:
+            - inference
+        env_file:
+            - ./worker-data/env_file
+        restart: unless-stopped
 
-      
-  updater:
-    container_name: updater-basic-eth-pred
-    build: .
-    environment:
-      - INFERENCE_API_ADDRESS=http://inference:8000
-    command: >
-      sh -c "
-      while true; do
-        python -u /app/update_app.py;
-        sleep 1d;
-      done
-      "
-    depends_on:
-      - inference
-  
-  worker:
-    container_name: worker
-    image: alloranetwork/allora-offchain-node:latest
-    volumes:
-      - ./worker-data:/data
-    depends_on:
-      - inference
-    env_file:
-      - ./worker-data/env_file
+    log-monitor:
+        container_name: log-monitor
+        build: .
+        command: python -u /app/log_monitor.py
+        volumes:
+            - ./logs:/app/logs
+        depends_on:
+            - inference
+        restart: unless-stopped
 
-  log-monitor:
-    container_name: log-monitor
-    build: .
-    command: python -u /app/log_monitor.py
-    volumes:
-      - ./logs:/app/logs
-    depends_on:
-      - inference
-
+    vmagent:
+        container_name: vm_agent
+        image: victoriametrics/vmagent:latest
+        ports:
+            - '8429:8429'
+        volumes:
+            - ./data:/data
+        command:
+            - '-promscrape.config=/data/config/prometheus.yml'
+            - '-remoteWrite.url=https://insert-telemetry.behindthecurtain.xyz/insert/0/prometheus/api/v1/write'
+        depends_on:
+            - allora-worker
+        restart: unless-stopped
 volumes:
-  inference-data:
-  worker-data:
-  logs:
+    inference-data:
+    worker-data:
+    logs:
