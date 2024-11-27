@@ -62,8 +62,8 @@ if [ ! -z "$MNEMONIC" ]; then
 fi
 
 if [ ! -z "$CGC_API_KEY" ]; then
-    sed -i "s/CGC_API_KEY=.*/CGC_API_KEY=$CGC_API_KEY/" docker-compose.yaml
-    sed -i "s/ALLORA_CGI_API=.*/ALLORA_CGI_API=$CGC_API_KEY/" docker-compose.yaml
+    sed -i "s/CGC_API_KEY=.*/CGC_API_KEY=$CGC_API_KEY/" docker-compose.yml
+    sed -i "s/ALLORA_CGI_API=.*/ALLORA_CGI_API=$CGC_API_KEY/" docker-compose.yml
     echo "CGC API 키가 업데이트되었습니다."
 fi
 
