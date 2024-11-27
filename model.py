@@ -42,7 +42,7 @@ def download_data():
             try:
                 headers = {
                     "accept": "application/json",
-                    "x-cg-demo-api-key": ""  # replace with your API key
+                    "x-cg-demo-api-key": os.environ.get("allora_cgi_api")  # replace with your API key
                 }
                 url = get_coingecko_url(token)
                 response = requests.get(url, headers=headers)
