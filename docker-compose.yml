@@ -4,7 +4,7 @@ services:
         build: .
         command: python -u /app/app.py
         environment:
-            - ALLORA_CGI_API=your_cgc_api_key
+            - ALLORA_CGI_API=${CGC_API_KEY:-your_cgc_api_key}
         ports:
             - '8000:8000'
         volumes:

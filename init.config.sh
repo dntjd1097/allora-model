@@ -62,12 +62,19 @@ json_content=$(cat ./config.json)
 stringified_json=$(echo "$json_content" | jq -c .)
 
 mnemonic=$(jq -r '.wallet.addressRestoreMnemonic' config.json)
+# mnemonic이 존재할 때의 코드 부분 수정
 if [ -n "$mnemonic" ]; then
     echo "ALLORA_OFFCHAIN_NODE_CONFIG_JSON='$stringified_json'" > ./worker-data/env_file
     echo "NAME=$nodeName" >> ./worker-data/env_file
     echo "ENV_LOADED=true" >> ./worker-data/env_file
     echo "wallet mnemonic already provided by you, loading config.json . Please proceed to run docker compose"
-    exit 1
+    
+    # CGC API Key 업데이트 추가
+    if [ -n "$3" ]; then
+        sed -i "s/ALLORA_CGI_API=.*/ALLORA_CGI_API=$3/" docker-compose.yaml
+    fi
+    
+    exit 0  # exit 1을 exit 0으로 변경
 fi
 
 if [ ! -f ./worker-data/env_file ]; then
